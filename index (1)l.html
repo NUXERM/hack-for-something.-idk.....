@@ -114,24 +114,23 @@ b.src=a;document.head.appendChild(b)}}}}}else b='window.eaglercraftXOpts.contain
 </div>
 </div>
 </body>
-</html><script>
+</html>
+
+<script>
 window.addEventListener('DOMContentLoaded',function(){
-  // Remove img tags with wurst in src or alt
-  document.querySelectorAll('img').forEach(function(i){
-    if((i.src&&i.src.toLowerCase().includes('wurst'))||(i.alt&&i.alt.toLowerCase().includes('wurst')))i.remove()
-  });
-  // Remove div/section/etc with wurst background image
-  document.querySelectorAll('*').forEach(function(i){
-    var bg=i.style&&i.style.backgroundImage;
-    if(bg&&bg.toLowerCase().includes('wurst'))i.remove()
-  });
-  // Remove links pointing to wurst
-  document.querySelectorAll('a[href*="wurst" i],a[href*="WURST"]').forEach(function(i){i.remove()});
-  // Remove object/embed tags with wurst
-  document.querySelectorAll('object[data*="wurst" i],embed[src*="wurst" i]').forEach(function(i){i.remove()});
-  // Remove source tags (picture element) with wurst
-  document.querySelectorAll('source[srcset*="wurst" i],source[src*="wurst" i]').forEach(function(i){i.remove()});
-  // Remove canvas or svg with wurst in id/class
-  document.querySelectorAll('[id*="wurst" i],[class*="wurst" i]').forEach(function(i){i.remove()});
+  function nuke(el){if(el&&el.parentNode)el.parentNode.removeChild(el)}
+  // Everything with wurst in src, alt, href, data, id, class, style, title
+  var all=document.querySelectorAll('*');
+  for(var i=0;i<all.length;i++){
+    var e=all[i];
+    var html=e.outerHTML?e.outerHTML.toLowerCase():'';
+    if(html.includes('wurst')){
+      nuke(e);
+      i--;
+    }
+  }
+  // Scan text nodes for "wurst" and remove parent
+  var walk=document.createTreeWalker(document.body,4,{acceptNode:function(n){return n.nodeValue.toLowerCase().includes('wurst')?1:2}});
+  while(walk.nextNode())nuke(walk.currentNode.parentNode);
 });
 </script>
